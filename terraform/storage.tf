@@ -20,12 +20,12 @@ resource "google_storage_bucket" "dataflow_storage" {
 
 resource "google_storage_bucket_iam_member" "dataflow_worker_bucket_access" {
   bucket = google_storage_bucket.dataflow_storage.name
-  role   = "roles/storage.objectAdmin"
+  role   = "roles/storage.admin"
   member = "serviceAccount:${google_service_account.dataflow_worker.email}"
 }
 
 resource "google_storage_bucket_iam_member" "github_deployer_bucket_access" {
   bucket = google_storage_bucket.dataflow_storage.name
-  role   = "roles/storage.objectAdmin"
+  role   = "roles/storage.admin"
   member = "serviceAccount:${google_service_account.github_deployer.email}"
 }

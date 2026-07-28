@@ -41,3 +41,8 @@ resource "google_project_iam_member" "reporting_roles" {
   role    = each.key
   member  = "serviceAccount:${google_service_account.fastapi_reporting.email}"
 }
+
+resource "google_service_account" "fastapi_frontend" {
+  account_id   = "fastapi-frontend"
+  display_name = "FastAPI Frontend Service Account"
+}

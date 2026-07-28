@@ -1,0 +1,73 @@
+name: Deploy Frontend Dashboard to Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'fpa-project/frontend/**'
+      - '.github/workflows/deploy-frontend.yml'
+
+env:
+  GAR_LOCATION: us-central1
+  REPOSITORY: fpa-repo
+  SERVICE: fastapi-frontend
+
+jobs:
+  deploy:
+    name: Build & Deploy Frontend
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud via WIF
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER_NAME }}
+          service_account: ${{ secrets.DEPLOYER_SA_EMAIL }}
+
+      - name: Set up gcloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker Credentials for Artifact Registry
+        run: |
+          gcloud auth configure-docker ${{ env.GAR_LOCATION }}-docker.pkg.dev --quiet
+
+      - name: Build & Tag Image
+        run: |
+          docker build \
+            -t ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }} \
+            -t ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:latest \
+            ./fpa-project/frontend
+
+      - name: Push Image to Artifact Registry
+        run: |
+          docker push ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }}
+          docker push ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:latest
+
+      - name: Get Image Digest
+        id: image-digest
+        run: |
+          DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }})
+          echo "digest=$DIGEST" >> $GITHUB_OUTPUT
+
+      - name: Deploy to Cloud Run (Digest-Based)
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: ${{ env.SERVICE }}
+          region: ${{ env.GAR_LOCATION }}
+          image: ${{ steps.image-digest.outputs.digest }}
+          flags: |
+            --service-account=fastapi-frontend@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com
+            --set-env-vars=GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }},BACKEND_API_URL=${{ secrets.BACKEND_API_URL }}
+            --allow-unauthenticated
+            --min-instances=0
+            --max-instances=5
+            --concurrency=250
+            --timeout=15s
+            --cpu-boost
