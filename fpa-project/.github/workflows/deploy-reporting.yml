@@ -65,6 +65,8 @@ jobs:
           flags: |
             --service-account=fastapi-reporting@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com
             --set-env-vars=GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }},REDIS_HOST=${{ secrets.REDIS_HOST }}
+            --vpc-connector=fpa-vpc-connector
+            --vpc-egress=private-ranges-only
             --allow-unauthenticated
             --min-instances=0
             --max-instances=10

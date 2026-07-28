@@ -13,10 +13,12 @@ resource "google_iam_workload_identity_pool_provider" "github_provider" {
     "attribute.actor"      = "assertion.actor"
     "attribute.repository" = "assertion.repository"
   }
+  attribute_condition = "attribute.repository == '${var.github_repository}'"
   oidc {
     issuer_uri = "https://token.actions.githubusercontent.com"
   }
 }
+
 
 resource "google_service_account" "github_deployer" {
   account_id   = "github-deployer"

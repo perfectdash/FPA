@@ -38,3 +38,14 @@ output "github_deployer_service_account_email" {
   description = "The email address of the GitHub Actions deployer service account."
 }
 
+output "redis_host" {
+  value       = google_redis_instance.redis_cache.host
+  description = "The private IP address of the Memorystore Redis instance."
+}
+
+output "vpc_connector_name" {
+  value       = google_vpc_access_connector.connector.name
+  description = "The name of the Serverless VPC Access Connector."
+}
+
+
