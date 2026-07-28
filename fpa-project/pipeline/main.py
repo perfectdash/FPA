@@ -140,6 +140,7 @@ class BudgetComplianceCheckFn(beam.DoFn):
             logger.warning(f"BUDGET BREACH detected: {alert}")
             yield alert
 
+#vat = "done"
 
 def run(argv=None):
     parser = argparse.ArgumentParser()
