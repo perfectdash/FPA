@@ -70,6 +70,8 @@ jobs:
             --temp_location=gs://${{ secrets.GCP_PROJECT_ID }}-dataflow-storage/temp \
             --staging_location=gs://${{ secrets.GCP_PROJECT_ID }}-dataflow-storage/staging \
             --service_account_email=dataflow-worker@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com \
+            --input_subscription=projects/${{ secrets.GCP_PROJECT_ID }}/subscriptions/transactions-sub \
+            --alerts_topic=projects/${{ secrets.GCP_PROJECT_ID }}/topics/budget-breaches-alerts \
             --db_instance_connection_name=${{ secrets.GCP_PROJECT_ID }}:${{ env.GAR_LOCATION }}:fpa-budget-db \
             --db_name=budget_registry \
             --db_user=pgadmin \
