@@ -5,7 +5,7 @@ import time
 import apache_beam as beam
 from apache_beam.options.pipeline_options import PipelineOptions, SetupOptions
 from apache_beam.transforms.trigger import AfterWatermark, AfterCount, Repeatedly
-from apache_beam.window import FixedWindows, TimestampedValue
+from apache_beam.transforms.window import FixedWindows, TimestampedValue
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("fpa_pipeline")
