@@ -61,6 +61,15 @@ jobs:
           docker push ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SDK_IMAGE_NAME }}:${{ github.sha }}
           docker push ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SDK_IMAGE_NAME }}:latest
 
+      - name: Cancel Existing Active Dataflow Job (Self-Healing)
+        run: |
+          ACTIVE_JOB_ID=$(gcloud dataflow jobs list --region=${{ env.GAR_LOCATION }} --status=active --filter="name:fpa-pipeline-job" --format="value(id)")
+          if [ ! -z "$ACTIVE_JOB_ID" ]; then
+            echo "Canceling active Dataflow job $ACTIVE_JOB_ID..."
+            gcloud dataflow jobs cancel "$ACTIVE_JOB_ID" --region=${{ env.GAR_LOCATION }}
+            sleep 30
+          fi
+
       - name: Submit Streaming Job to Google Cloud Dataflow
         run: |
           python fpa-project/pipeline/main.py \
