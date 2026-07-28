@@ -67,6 +67,10 @@ jobs:
             --runner=DataflowRunner \
             --project=${{ secrets.GCP_PROJECT_ID }} \
             --region=${{ env.GAR_LOCATION }} \
+            --worker_zone=us-central1-f \
+            --machine_type=n1-standard-1 \
+            --num_workers=1 \
+            --max_num_workers=1 \
             --temp_location=gs://${{ secrets.GCP_PROJECT_ID }}-dataflow-storage/temp \
             --staging_location=gs://${{ secrets.GCP_PROJECT_ID }}-dataflow-storage/staging \
             --service_account_email=dataflow-worker@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com \
