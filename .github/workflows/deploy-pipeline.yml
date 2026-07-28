@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'pipeline/**'
+      - 'fpa-project/pipeline/**'
       - '.github/workflows/deploy-pipeline.yml'
 
 env:
@@ -34,7 +34,7 @@ jobs:
       - name: Install Pipeline Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r pipeline/requirements.txt pg8000
+          pip install -r fpa-project/pipeline/requirements.txt pg8000
 
       - name: Authenticate to Google Cloud via WIF
         uses: google-github-actions/auth@v2
@@ -54,7 +54,7 @@ jobs:
           docker build \
             -t ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SDK_IMAGE_NAME }}:${{ github.sha }} \
             -t ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SDK_IMAGE_NAME }}:latest \
-            ./pipeline
+            ./fpa-project/pipeline
 
       - name: Push Custom SDK Image to Artifact Registry
         run: |
@@ -63,7 +63,7 @@ jobs:
 
       - name: Submit Streaming Job to Google Cloud Dataflow
         run: |
-          python pipeline/main.py \
+          python fpa-project/pipeline/main.py \
             --runner=DataflowRunner \
             --project=${{ secrets.GCP_PROJECT_ID }} \
             --region=${{ env.GAR_LOCATION }} \

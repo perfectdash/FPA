@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'ingestion/**'
+      - 'fpa-project/ingestion/**'
       - '.github/workflows/deploy-ingestion.yml'
 
 env:
@@ -43,7 +43,7 @@ jobs:
           docker build \
             -t ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }} \
             -t ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:latest \
-            ./ingestion
+            ./fpa-project/ingestion
 
       - name: Push Image to Artifact Registry
         run: |

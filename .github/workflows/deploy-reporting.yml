@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'reporting/**'
+      - 'fpa-project/reporting/**'
       - '.github/workflows/deploy-reporting.yml'
 
 env:
@@ -43,7 +43,7 @@ jobs:
           docker build \
             -t ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }} \
             -t ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:latest \
-            ./reporting
+            ./fpa-project/reporting
 
       - name: Push Image to Artifact Registry
         run: |
