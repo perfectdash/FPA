@@ -1,5 +1,5 @@
 # Base image matches the Apache Beam SDK python version
-FROM apache/beam_python3.11_sdk:2.56.0
+FROM apache/beam_python3.11_sdk:2.59.0
 
 # Set the working directory inside the container
 WORKDIR /app
