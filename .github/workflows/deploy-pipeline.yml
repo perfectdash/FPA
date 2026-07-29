@@ -77,7 +77,7 @@ jobs:
           python fpa-project/pipeline/main.py \
             --runner=DataflowRunner \
             --project=${{ secrets.GCP_PROJECT_ID }} \
-            --region=asia-south1 \
+            --region=${{env.GAR_LOCATION}} \
             --machine_type=n1-standard-1 \
             --num_workers=1 \
             --max_num_workers=1 \
