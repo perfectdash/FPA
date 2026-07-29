@@ -231,19 +231,19 @@ export default function FpaDashboard() {
             <h3>Budget vs. Actual Variance</h3>
             <div className="chart-container">
               <ResponsiveContainer width="100%" height={320}>
-                <BarChart data={data} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#1e293b" />
-                  <XAxis dataKey="department_id" stroke="#94a3b8" fontSize={11} tickLine={false} />
-                  <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} tickFormatter={(v) => `$${v/1000}k`} />
+                <BarChart data={data} margin={{ top: 10, right: 10, left: -10, bottom: 0 }} barGap={6}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#1e1e24" />
+                  <XAxis dataKey="department_id" stroke="#71717a" fontSize={11} tickLine={false} />
+                  <YAxis stroke="#71717a" fontSize={11} tickLine={false} tickFormatter={(v) => `$${v/1000}k`} />
                   <Tooltip 
-                    contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '8px' }}
-                    labelStyle={{ color: '#94a3b8', fontWeight: 'bold' }}
+                    contentStyle={{ backgroundColor: '#0a0a0c', borderColor: '#27272a', borderRadius: '8px' }}
+                    labelStyle={{ color: '#a1a1aa', fontWeight: 'bold' }}
                     itemStyle={{ color: '#fff' }}
                     formatter={(val) => [`$${parseFloat(val).toLocaleString()}`, '']}
                   />
                   <Legend verticalAlign="top" height={36} iconType="circle" />
-                  <Bar dataKey="allocated_budget" name="Allocated Budget" fill="#4f46e5" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="actual_spent" name="Actual Expenditure" fill="#e11d48" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="allocated_budget" name="Allocated Budget" fill="#27272a" radius={[3, 3, 0, 0]} barSize={16} />
+                  <Bar dataKey="actual_spent" name="Actual Expenditure" fill="#7c3aed" radius={[3, 3, 0, 0]} barSize={16} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
