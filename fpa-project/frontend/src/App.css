@@ -680,3 +680,42 @@ body::before {
     padding: 1.5rem 1rem;
   }
 }
+
+/* Loading Screen Styles */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  text-align: center;
+  padding: 2rem;
+}
+
+.loading-spinner {
+  width: 3.5rem;
+  height: 3.5rem;
+  color: var(--accent-violet);
+  animation: spin 1.2s linear infinite;
+  margin-bottom: 1.5rem;
+}
+
+.loading-text {
+  font-family: var(--font-family-sans);
+  font-weight: 600;
+  font-size: 1.125rem;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

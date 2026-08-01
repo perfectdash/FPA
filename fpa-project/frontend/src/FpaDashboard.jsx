@@ -143,9 +143,9 @@ export default function FpaDashboard() {
 
   if (loading && data.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-slate-900 text-slate-100">
-        <Activity className="w-12 h-12 text-indigo-500 animate-spin mb-4" />
-        <p className="font-semibold text-lg tracking-wider">Syncing Corporate Ledger State...</p>
+      <div className="loading-container">
+        <Activity className="loading-spinner" />
+        <p className="loading-text">Syncing Corporate Ledger State...</p>
       </div>
     );
   }
