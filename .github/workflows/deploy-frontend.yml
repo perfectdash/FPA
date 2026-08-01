@@ -50,6 +50,12 @@ jobs:
           docker push ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }}
           docker push ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:latest
 
+      - name: Resolve Ingestion API URL
+        id: resolve-ingester
+        run: |
+          INGESTION_URL=$(echo "${{ secrets.BACKEND_API_URL }}" | sed 's/fastapi-reporting/fastapi-ingester/g')
+          echo "ingestion_url=$INGESTION_URL" >> $GITHUB_OUTPUT
+
       - name: Get Image Digest
         id: image-digest
         run: |
@@ -64,7 +70,7 @@ jobs:
           image: ${{ steps.image-digest.outputs.digest }}
           flags: |
             --service-account=fastapi-frontend@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com
-            --set-env-vars=GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }},BACKEND_API_URL=${{ secrets.BACKEND_API_URL }}
+            --set-env-vars=GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }},BACKEND_API_URL=${{ secrets.BACKEND_API_URL }},INGESTION_API_URL=${{ steps.resolve-ingester.outputs.ingestion_url }}
             --allow-unauthenticated
             --min-instances=0
             --max-instances=5

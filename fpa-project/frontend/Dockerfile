@@ -21,6 +21,7 @@ COPY nginx.conf.template /etc/nginx/templates/default.conf.template
 # Read PORT from environment — Cloud Run sets this dynamically
 ENV PORT=8080
 ENV BACKEND_API_URL=""
+ENV INGESTION_API_URL=""
 
 EXPOSE 8080
 

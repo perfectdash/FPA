@@ -10,6 +10,11 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 3000,
       proxy: {
+        '/api/v1/transactions': {
+          target: env.INGESTION_API_URL || 'http://localhost:8000',
+          changeOrigin: true,
+          secure: false
+        },
         '/api': {
           target: env.BACKEND_API_URL || env.VITE_API_URL || 'http://localhost:8001',
           changeOrigin: true,
