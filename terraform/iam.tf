@@ -25,7 +25,8 @@ resource "google_project_iam_member" "dataflow_roles" {
     "roles/pubsub.subscriber",
     "roles/pubsub.publisher",
     "roles/bigquery.dataEditor",
-    "roles/cloudsql.client"
+    "roles/cloudsql.client",
+    "roles/artifactregistry.reader"
   ])
   project = var.project_id
   role    = each.key

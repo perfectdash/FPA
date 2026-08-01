@@ -12,6 +12,7 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
 )
+
 logger = logging.getLogger("ingestion_service")
 
 app = FastAPI(
@@ -20,6 +21,7 @@ app = FastAPI(
 )
 
 class FinancialEvent(BaseModel):
+
     transaction_id: str = Field(..., alias="transactionId")
     timestamp: str = Field(..., description="ISO 8601 format timestamp or unix timestamp string")
     department_id: str = Field(..., alias="departmentId")
