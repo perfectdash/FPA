@@ -2,6 +2,8 @@ resource "google_iam_workload_identity_pool" "github_pool" {
   workload_identity_pool_id = "fpa-github-pool"
   display_name              = "FP&A GitHub Actions Pool"
   description               = "Identity pool for GitHub Actions authentication"
+
+  depends_on = [google_project_service.enabled_apis["iam.googleapis.com"]]
 }
 
 resource "google_iam_workload_identity_pool_provider" "github_provider" {
@@ -23,6 +25,8 @@ resource "google_iam_workload_identity_pool_provider" "github_provider" {
 resource "google_service_account" "github_deployer" {
   account_id   = "github-deployer"
   display_name = "GitHub Actions CI/CD Deployer Service Account"
+
+  depends_on = [google_project_service.enabled_apis["iam.googleapis.com"]]
 }
 
 resource "google_service_account_iam_member" "wif_impersonation" {

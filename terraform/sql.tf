@@ -11,7 +11,9 @@ resource "google_sql_database_instance" "postgres" {
     }
   }
 
-  deletion_protection = true 
+  deletion_protection = false 
+
+  depends_on = [google_project_service.enabled_apis["sqladmin.googleapis.com"]]
 }
 
 resource "google_sql_database" "budget_registry" {

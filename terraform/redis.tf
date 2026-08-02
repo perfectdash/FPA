@@ -15,6 +15,8 @@ resource "google_project_service" "redis_api" {
 resource "google_compute_network" "fpa_vpc" {
   name                    = "fpa-vpc"
   auto_create_subnetworks = false
+
+  depends_on = [google_project_service.enabled_apis["compute.googleapis.com"]]
 }
 
 # Dedicated subnet for general compute (if needed in the future)

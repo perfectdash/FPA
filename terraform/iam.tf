@@ -1,16 +1,22 @@
 resource "google_service_account" "fastapi_ingester" {
   account_id   = "fastapi-ingester"
   display_name = "FastAPI Ingestion Service Account"
+
+  depends_on = [google_project_service.enabled_apis["iam.googleapis.com"]]
 }
 
 resource "google_service_account" "dataflow_worker" {
   account_id   = "dataflow-worker"
   display_name = "Dataflow Pipeline Worker Service Account"
+
+  depends_on = [google_project_service.enabled_apis["iam.googleapis.com"]]
 }
 
 resource "google_service_account" "fastapi_reporting" {
   account_id   = "fastapi-reporting"
   display_name = "FastAPI Reporting API Service Account"
+
+  depends_on = [google_project_service.enabled_apis["iam.googleapis.com"]]
 }
 
 resource "google_project_iam_member" "ingester_pubsub" {
@@ -46,4 +52,6 @@ resource "google_project_iam_member" "reporting_roles" {
 resource "google_service_account" "fastapi_frontend" {
   account_id   = "fastapi-frontend"
   display_name = "FastAPI Frontend Service Account"
+
+  depends_on = [google_project_service.enabled_apis["iam.googleapis.com"]]
 }

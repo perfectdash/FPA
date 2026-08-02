@@ -2,7 +2,9 @@ resource "google_bigquery_dataset" "fpa_analytics" {
   dataset_id                  = "fpa_analytics"
   friendly_name               = "FP&A Analytics Dataset"
   description                 = "Contains transaction audit logs and windowed department budget aggregations."
-  location                    = "US"
+  location                    = var.region
+
+  depends_on = [google_project_service.enabled_apis["bigquery.googleapis.com"]]
 }
 
 resource "google_bigquery_table" "transactions_raw" {
@@ -104,7 +106,7 @@ EOF
 
 resource "google_bigquery_connection" "fpa_postgres" {
   connection_id = "fpa-postgres-connection"
-  location      = "US"
+  location      = var.region
   friendly_name = "FP&A Cloud SQL Connection"
   description   = "Link from BigQuery to Cloud SQL Postgres budget instance"
   cloud_sql {
@@ -116,5 +118,7 @@ resource "google_bigquery_connection" "fpa_postgres" {
       password = google_sql_user.pgadmin.password
     }
   }
+
+  depends_on = [google_project_service.enabled_apis["bigqueryconnection.googleapis.com"]]
 }
 

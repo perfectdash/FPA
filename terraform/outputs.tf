@@ -24,7 +24,7 @@ output "workload_identity_provider_name" {
 }
 
 output "artifact_registry_repository_url" {
-  value       = "us-central1-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.fpa_repo.name}"
+  value       = "${var.region}-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.fpa_repo.name}"
   description = "The repository URL for Artifact Registry Docker images."
 }
 

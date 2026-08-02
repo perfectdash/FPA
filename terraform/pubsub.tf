@@ -2,6 +2,8 @@
 resource "google_pubsub_topic" "transactions" {
   name                       = "transactions"
   message_retention_duration = "86400s" 
+
+  depends_on = [google_project_service.enabled_apis["pubsub.googleapis.com"]]
 }
 
 resource "google_pubsub_subscription" "transactions_sub" {
@@ -22,6 +24,8 @@ resource "google_pubsub_subscription" "transactions_sub" {
 resource "google_pubsub_topic" "budget_breaches_alerts" {
   name                       = "budget-breaches-alerts"
   message_retention_duration = "604800s" 
+
+  depends_on = [google_project_service.enabled_apis["pubsub.googleapis.com"]]
 }
 
 resource "google_pubsub_subscription" "budget_breaches_alerts_sub" {
