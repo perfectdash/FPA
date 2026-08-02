@@ -9,7 +9,7 @@ on:
       - '.github/workflows/deploy-ingestion.yml'
 
 env:
-  GAR_LOCATION: us-central1
+  GAR_LOCATION: asia-south1
   REPOSITORY: fpa-repo
   SERVICE: fastapi-ingester
 

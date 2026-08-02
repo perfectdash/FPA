@@ -5,13 +5,13 @@ variable "project_id" {
 
 variable "region" {
   type        = string
-  default     = "us-central1"
+  default     = "asia-south1"
   description = "Default deployment region for GCP resources."
 }
 
 variable "zone" {
   type        = string
-  default     = "us-central1-a"
+  default     = "asia-south1-a"
   description = "Default compute zone for SQL and Dataflow VM targets."
 }
 

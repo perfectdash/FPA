@@ -22,6 +22,8 @@ COPY nginx.conf.template /etc/nginx/templates/default.conf.template
 ENV PORT=8080
 ENV BACKEND_API_URL=""
 ENV INGESTION_API_URL=""
+# Filter substitution to prevent envsubst from wiping Nginx variables ($uri, $remote_addr, etc.)
+ENV NGINX_ENVSUBST_FILTER="PORT BACKEND_API_URL INGESTION_API_URL"
 
 EXPOSE 8080
 

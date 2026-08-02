@@ -9,7 +9,7 @@ on:
       - '.github/workflows/deploy-pipeline.yml'
 
 env:
-  GAR_LOCATION: us-central1
+  GAR_LOCATION: asia-south1
   REPOSITORY: fpa-repo
   SDK_IMAGE_NAME: dataflow-sdk
 
@@ -67,7 +67,7 @@ jobs:
           python fpa-project/pipeline/main.py \
             --runner=DataflowRunner \
             --project=${{ secrets.GCP_PROJECT_ID }} \
-            --region=us-central1 \
+            --region=asia-south1 \
             --machine_type=n1-standard-1 \
             --num_workers=1 \
             --max_num_workers=1 \
