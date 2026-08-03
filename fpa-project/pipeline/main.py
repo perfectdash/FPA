@@ -7,6 +7,9 @@ from apache_beam.options.pipeline_options import PipelineOptions, SetupOptions
 from apache_beam.transforms.trigger import AfterWatermark, AfterCount, Repeatedly
 from apache_beam.transforms.window import FixedWindows, TimestampedValue
 
+
+# I believe now it should get the access of doing so
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("fpa_pipeline")
 
@@ -34,8 +37,11 @@ class ParseTransactionFn(beam.DoFn):
             yield beam.pvalue.TaggedOutput("dead_letter", element)
 
 class BudgetComplianceCheckFn(beam.DoFn):
+    
     """Compares the current window aggregations against department budgets loaded from Cloud SQL."""
+
     def __init__(self, db_instance_connection_name, db_name="budget_registry", db_user="pgadmin", db_password=None):
+        
         self.db_instance_connection_name = db_instance_connection_name
         self.db_name = db_name
         self.db_user = db_user
@@ -143,11 +149,12 @@ class BudgetComplianceCheckFn(beam.DoFn):
 #vat = "done"
 
 def run(argv=None):
+
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--input_subscription",
         default="projects/google-corp-eng-fpa/subscriptions/transactions-sub",
-        help="Pub/Sub subscription to pull from in GCP mode."
+       help="Pub/Sub subscription to pull from in GCP mode."
     )
     parser.add_argument(
         "--output_table",
@@ -179,8 +186,8 @@ def run(argv=None):
         default=None,
         help="PostgreSQL password."
     )
+
     known_args, pipeline_args = parser.parse_known_args(argv)
-    
     pipeline_options = PipelineOptions(pipeline_args)
     pipeline_options.view_as(SetupOptions).save_main_session = True
     
@@ -188,7 +195,9 @@ def run(argv=None):
     pipeline_options.view_as(StandardOptions).streaming = True
     
     logger.info("Starting GCP-STREAMING Beam pipeline...")
+
     with beam.Pipeline(options=pipeline_options) as p:
+
         raw_stream = p | "Read From PubSub" >> beam.io.ReadFromPubSub(
             subscription=known_args.input_subscription
         )

@@ -30,6 +30,7 @@ resource "google_project_iam_member" "dataflow_roles" {
     "roles/dataflow.worker",
     "roles/pubsub.subscriber",
     "roles/pubsub.publisher",
+    "roles/pubsub.viewer",
     "roles/bigquery.dataEditor",
     "roles/cloudsql.client",
     "roles/artifactregistry.reader"
