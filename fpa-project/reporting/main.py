@@ -17,6 +17,7 @@ logger = logging.getLogger("reporting_service")
 
 # will give the cloud run these secrets and let the container to access these things
 PROJECT_ID = os.getenv("GCP_PROJECT_ID")
+GCP_REGION = os.getenv("GCP_REGION", "asia-south1")
 REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
 REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
 
@@ -69,7 +70,7 @@ MOCK_BUDGETS = {
     "D-303": {"name": "Marketing", "allocated": 75000.0, "base_spent": 42000.0}
 }
 
-def get_variance_query(project: str, days: int = 30) -> str:
+def get_variance_query(project: str, region: str = "asia-south1", days: int = 30) -> str:
     """Compiles the BigQuery DDL query for variance calculations."""
     return f"""
     WITH ActualSpend AS (
@@ -85,7 +86,7 @@ def get_variance_query(project: str, days: int = 30) -> str:
         department_id, 
         allocated_budget 
       FROM EXTERNAL_QUERY(
-        "projects/{project}/locations/us/connections/fpa-postgres-connection",
+        "projects/{project}/locations/{region}/connections/fpa-postgres-connection",
         "SELECT department_id, allocated_budget FROM department_budgets;"
       )
     )
@@ -120,8 +121,10 @@ async def get_variance_report(days: int = 30):
 
     if bq_client and PROJECT_ID:
         try:
-            logger.info("Executing BigQuery analytics query (Cache Miss)")
-            query_job = bq_client.query(get_variance_query(PROJECT_ID, days))
+            query_job = bq_client.query(
+                get_variance_query(PROJECT_ID, GCP_REGION, days),
+                location=GCP_REGION
+            )
             results = await asyncio.to_thread(query_job.result)
             data_list = []
             

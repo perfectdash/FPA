@@ -64,7 +64,7 @@ jobs:
           image: ${{ steps.image-digest.outputs.digest }}
           flags: |
             --service-account=fastapi-reporting@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com
-            --set-env-vars=GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }},REDIS_HOST=${{ secrets.REDIS_HOST }}
+            --set-env-vars=GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }},REDIS_HOST=${{ secrets.REDIS_HOST }},GCP_REGION=${{ env.GAR_LOCATION }}
             --vpc-connector=fpa-vpc-connector
             --vpc-egress=private-ranges-only
             --allow-unauthenticated
