@@ -21,7 +21,8 @@ app = FastAPI(
 )
 
 class FinancialEvent(BaseModel):
-
+    
+    # aligin the camelcase with python variables format using alias
     transaction_id: str = Field(..., alias="transactionId")
     timestamp: str = Field(..., description="ISO 8601 format timestamp or unix timestamp string")
     department_id: str = Field(..., alias="departmentId")
@@ -71,6 +72,7 @@ else:
 
 @app.post("/api/v1/transactions", status_code=status.HTTP_202_ACCEPTED)
 async def ingest_transaction(event: FinancialEvent):
+    
     """
     Asynchronously ingests financial transactions, validates the schema,
     and publishes the event to Google Cloud Pub/Sub (or local mock queue).

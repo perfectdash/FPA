@@ -9,6 +9,7 @@ resource "google_project_service" "enabled_apis" {
     "bigquery.googleapis.com",
     "bigqueryconnection.googleapis.com",
     "dataflow.googleapis.com",
+    "run.googleapis.com",
   ])
 
   project            = var.project_id

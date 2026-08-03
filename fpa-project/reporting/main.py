@@ -15,6 +15,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger("reporting_service")
 
+# will give the cloud run these secrets and let the container to access these things
 PROJECT_ID = os.getenv("GCP_PROJECT_ID")
 REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
 REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
@@ -60,6 +61,8 @@ if PROJECT_ID:
 else:
     logger.info("GCP_PROJECT_ID environment variable not found")
 
+
+# let's consider this for testing
 MOCK_BUDGETS = {
     "D-101": {"name": "HR Division", "allocated": 50000.0, "base_spent": 38000.0},
     "D-202": {"name": "Engineering", "allocated": 120000.0, "base_spent": 105000.0},
@@ -98,6 +101,7 @@ def get_variance_query(project: str, days: int = 30) -> str:
 
 @app.get("/api/v1/fpa/variance", response_model=List[Dict[str, Any]])
 async def get_variance_report(days: int = 30):
+
     """
     Fetches the budget variance report. Checks the Redis cache first
     to prevent costly BigQuery table scans. If both Redis and BigQuery
@@ -122,6 +126,7 @@ async def get_variance_report(days: int = 30):
             data_list = []
             
             for row in results:
+                
                 allocated = float(row.allocated_budget)
                 spent = float(row.actual_spent)
                 variance = float(row.variance)

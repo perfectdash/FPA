@@ -64,6 +64,19 @@ jobs:
 
       - name: Submit Streaming Job to Google Cloud Dataflow
         run: |
+          STATUS=$(gcloud dataflow jobs list \
+            --region=asia-south1 \
+            --filter="name=fpa-pipeline-job AND state=Running" \
+            --format="value(state)")
+
+          UPDATE_FLAG=""
+          if [ ! -z "$STATUS" ]; then
+            echo "Found active job fpa-pipeline-job. Applying in-place update..."
+            UPDATE_FLAG="--update"
+          else
+            echo "No active job named fpa-pipeline-job found. Submitting a new job..."
+          fi
+
           python fpa-project/pipeline/main.py \
             --runner=DataflowRunner \
             --project=${{ secrets.GCP_PROJECT_ID }} \
@@ -82,4 +95,5 @@ jobs:
             --db_user=pgadmin \
             --db_password=${{ secrets.DB_PASSWORD }} \
             --sdk_container_image=${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SDK_IMAGE_NAME }}:${{ github.sha }} \
-            --job_name=fpa-pipeline-job
+            --job_name=fpa-pipeline-job \
+            $UPDATE_FLAG

@@ -75,5 +75,7 @@ jobs:
             --min-instances=0
             --max-instances=5
             --concurrency=250
-            --timeout=15s
+            --timeout=60s 
             --cpu-boost
+
+# Let's increase the timeout for the same.
