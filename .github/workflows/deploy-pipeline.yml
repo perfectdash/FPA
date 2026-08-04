@@ -91,6 +91,7 @@ jobs:
             --input_subscription=projects/${{ secrets.GCP_PROJECT_ID }}/subscriptions/transactions-sub \
             --alerts_topic=projects/${{ secrets.GCP_PROJECT_ID }}/topics/budget-breaches-alerts \
             --db_instance_connection_name=${{ secrets.GCP_PROJECT_ID }}:${{ env.GAR_LOCATION }}:fpa-budget-db \
+            --output_table=${{secrets.GCP_PROJECT_ID }}:fpa_analytics.transactions_raw \
             --db_name=budget_registry \
             --db_user=pgadmin \
             --db_password=${{ secrets.DB_PASSWORD }} \

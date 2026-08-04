@@ -43,7 +43,8 @@ resource "google_project_iam_member" "dataflow_roles" {
 resource "google_project_iam_member" "reporting_roles" {
   for_each = toset([
     "roles/bigquery.dataViewer",
-    "roles/bigquery.jobUser"
+    "roles/bigquery.jobUser",
+    "roles/bigquery.connectionUser"
   ])
   project = var.project_id
   role    = each.key

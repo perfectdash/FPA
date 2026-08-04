@@ -122,3 +122,11 @@ resource "google_bigquery_connection" "fpa_postgres" {
   depends_on = [google_project_service.enabled_apis["bigqueryconnection.googleapis.com"]]
 }
 
+resource "google_project_iam_member" "bq_postgres_connection_client" {
+  project = var.project_id
+  role    = "roles/cloudsql.client"
+  member  = "serviceAccount:service-${data.google_project.project.number}@gcp-sa-bigqueryconnection.iam.gserviceaccount.com"
+}
+
+data "google_project" "project" {}
+
